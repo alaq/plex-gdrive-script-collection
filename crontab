@@ -1,0 +1,4 @@
+@reboot source ~/.bash_profile && cd ~/Library/Plex/current/usr/lib/plexmediaserver && ./start.sh
+*/3 * * * * /home/soviel/bin/checkmount; /home/soviel/scripts/appmonitor.sh; /home/soviel/bin/updatecloud
+25 6 * * * /home/soviel/scripts/youtube.sh
+@daily /home/soviel/scripts/additions.sh
