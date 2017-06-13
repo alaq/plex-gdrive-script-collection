@@ -1,0 +1,39 @@
+#!/bin/sh
+###############################################################################
+. "${HOME}/.config/PlexACD/plexacd.conf"
+. "/home/soviel/bin/plexacd.sh"
+MONITOR="$HOME/activity.log"
+
+lock="${HOME}/.config/PlexACD/rclone-lock"
+
+if [ ! -f ${lock} ]; then
+
+        echo "$$" > ${lock}
+        # Generate filelist and iterate through it...
+
+        FILES="$(find ~/upload -type f|wc -l)"
+        #find "$localcrypt" -type f |
+
+        if [ "$FILES" -gt 0 ]; then
+                log "Moving files to Google Drive" >> "$MONITOR"
+                ${rclonebin} -v --log-file=/home/soviel/rclone-transfers.log move /home/soviel/upload ${remotename}:
+                log "Move to Google Drive completed" >> "$MONITOR"
+
+                #find "$localcrypt" -maxdepth 1 -mindepth 1 |
+                #while read n; do
+                        #log "Moving files in $(basename $n) to ACD" >> "$MONITOR"
+                        #${rclonebin} -v --log-file=/home/soviel/rclone-transfers.log move "$n" ${remotename}:$(basename $n)
+                        #log "Move completed $(basename $n)" >> "$MONITOR"
+                #done
+        fi
+
+        # remove lock.
+        rm ${lock}
+
+        # success!
+        exit 0
+else
+        # error!
+        #log "Update already running on PID $(cat ${lock}), aborting update." >> "$MONITOR"
+        exit 3
+fi
