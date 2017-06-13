@@ -1,0 +1,46 @@
+#!/bin/sh
+##############################################################################
+# INCLUDES
+##############################################################################
+. ~/.config/PlexACD/plexacd.conf
+. ${bindir}/plexacd.sh
+MONITOR="$HOME/activity.log"
+
+
+# ACD mount
+#if [ ! -f /home/soviel/mounting/acdcrypt/mountcheck ]; then
+#       fusermount -u -z /home/soviel/mounting/acdcrypt
+#       ${bindir}/rclone mount --acd-templink-threshold 0 --buffer-size 256M --log-file /home/soviel/rmount.log acdcrypt: mounting/acdcrypt/ &
+
+#       if [ ! -f /home/soviel/mounting/acdcrypt/mountcheck ]; then
+#               log "ACD re-mounted" >> "$MONITOR"
+#       else
+#               log "ERROR while re-mounting" >> "$MONITOR"
+#       fi
+#fi
+
+# gdrive decrypted via rclone
+if [ ! -f /home/soviel/mounting/cpcp/mountcheck ]; then
+        fusermount -u -z /home/soviel/mounting/cpcp
+        /home/soviel/bin/rclone mount --log-file /home/soviel/rmount.log cpcp: mounting/cpcp/ &
+
+        if [ ! -f /home/soviel/mounting/cpcp/mountcheck ]; then
+                log "cpcp re-mounted" >> "$MONITOR"
+        else
+                log "ERROR while re-mounting cpcp" >> "$MONITOR"
+        fi
+fi
+
+# gdrive decrypted via rclone crypt after plexdrive
+if [ ! -f /home/soviel/mounting/dpcp/mountcheck ]; then
+        fusermount -u -z /home/soviel/mounting/dpcp
+        /home/soviel/bin/rclone mount -v --log-file /home/soviel/rmount.log dpcp: mounting/dpcp/ &
+
+        if [ -f /home/soviel/mounting/dpcp/mountcheck ]; then
+                log "dpcp re-mounted" >> "$MONITOR"
+        else
+                log "ERROR while re-mounting dpcp" >> "$MONITOR"
+        fi
+fi
+
+exit 0
