@@ -5,7 +5,7 @@ MONITOR="$HOME/activity.log"
 . ${bindir}/plexacd.sh
 
 #sonarr
-ps auxw | grep "SCREEN -dmS sonarr" | grep -v grep >  /dev/null
+screen -ls | grep  sonarr | grep -v grep >  /dev/null
 if [ $? != 0 ]
 then
         screen -dmS sonarr mono --debug /home/soviel/NzbDrone/NzbDrone.exe -c libcurl
@@ -13,7 +13,7 @@ then
 fi
 
 #radarr
-ps auxw | grep "SCREEN -dmS radarr" | grep -v grep >  /dev/null
+screen -ls | grep radarr | grep -v grep >  /dev/null
 if [ $? != 0 ]
 then
         screen -dmS radarr mono --debug /home/soviel/Radarr/Radarr.exe -c libcurl
@@ -21,15 +21,15 @@ then
 fi
 
 #plexpy
-ps auxw | grep "SCREEN -dmS plexpy" | grep -v grep >  /dev/null
+screen -ls | grep "plexpy" | grep -v grep >  /dev/null
 if [ $? != 0 ]
 then
-        screen -dmS plexpy .${home}/plexpy/PlexPy.py -p 40017
+        screen -dmS plexpy /home/soviel/plexpy/PlexPy.py -p 40017
         log "plexpy was re-launched" >> "$MONITOR"
 fi
 
 #jackett
-ps auxw | grep "SCREEN -dmS jackett" | grep -v grep >  /dev/null
+screen -ls | grep "jackett" | grep -v grep >  /dev/null
 if [ $? != 0 ]
 then
         screen -dmS jackett mono /home/soviel/Jackett/JackettConsole.exe -p 40003 -c libcurl
@@ -37,15 +37,15 @@ then
 fi
 
 #ombi
-ps auxw | grep "SCREEN -dmS ombi" | grep -v grep >  /dev/null
-if [ $? != 0 ]
-then
-        screen -dmS ombi mono ${home}/Ombi/Ombi.exe -c libcurl
-        log "ombi was re-launched" >> "$MONITOR"
-fi
+# screen -ls | grep "ombi" | grep -v grep >  /dev/null
+# if [ $? != 0 ]
+# then
+#       screen -dmS ombi mono ${home}/Ombi/Ombi.exe -c libcurl  
+#       log "ombi was re-launched" >> "$MONITOR"
+# fi
 
 #autodl
-ps auxw | grep "SCREEN -dmS autodl irssi" | grep -v grep >  /dev/null
+screen -ls | grep "autodl" | grep -v grep >  /dev/null
 if [ $? != 0 ]
 then
         screen -dmS autodl irssi
